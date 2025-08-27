@@ -6,12 +6,8 @@ import { FlashcardGame } from "@/components/games/FlashcardGame";
 import { QuickQuiz } from "@/components/games/QuickQuiz";
 import { MemoryMatch } from "@/components/games/MemoryMatch";
 import { WordScramble } from "@/components/games/WordScramble";
-import { TrueFalse } from "@/components/games/TrueFalse";
-import { TypeAnswer } from "@/components/games/TypeAnswer";
-import { SpeedRound } from "@/components/games/SpeedRound";
-import { FillBlanks } from "@/components/games/FillBlanks";
 import { StudyCard, QuizQuestion, GameScore, GameType } from "@/types/study";
-import { BookOpen, Brain, Zap, Shuffle, Trophy, Home, Settings, CheckSquare, Keyboard, Timer, Edit3 } from "lucide-react";
+import { BookOpen, Brain, Zap, Shuffle, Trophy, Home, Settings } from "lucide-react";
 import { toast } from "sonner";
 import studyHero from "@/assets/study-hero.jpg";
 
@@ -69,14 +65,6 @@ const Index = () => {
         return <MemoryMatch cards={studyCards} onComplete={handleGameComplete} />;
       case 'scramble':
         return <WordScramble cards={studyCards} onComplete={handleGameComplete} />;
-      case 'truefalse':
-        return <TrueFalse cards={studyCards} onComplete={handleGameComplete} />;
-      case 'typeanswer':
-        return <TypeAnswer cards={studyCards} onComplete={handleGameComplete} />;
-      case 'speedround':
-        return <SpeedRound cards={studyCards} onComplete={handleGameComplete} />;
-      case 'fillblanks':
-        return <FillBlanks cards={studyCards} onComplete={handleGameComplete} />;
       default:
         return null;
     }
@@ -158,7 +146,7 @@ const Index = () => {
             </div>
             <div className="h-8 w-px bg-border" />
             <div>
-              <p className="text-2xl font-bold text-accent">8</p>
+              <p className="text-2xl font-bold text-accent">4</p>
               <p className="text-sm text-muted-foreground">Mini Games</p>
             </div>
           </div>
@@ -174,7 +162,7 @@ const Index = () => {
         </div>
 
         {/* Game Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
           <GameCard
             title="Flashcards"
             description="Classic flip cards to test your memory. Perfect for quick reviews and memorization."
@@ -204,38 +192,6 @@ const Index = () => {
             description="Unscramble the letters to reveal the correct answer. Fun and challenging!"
             icon={<Shuffle className="w-6 h-6" />}
             onClick={() => setCurrentView('scramble')}
-            difficulty="medium"
-          />
-
-          <GameCard
-            title="True or False"
-            description="Quick true/false questions to test your knowledge rapidly."
-            icon={<CheckSquare className="w-6 h-6" />}
-            onClick={() => setCurrentView('truefalse')}
-            difficulty="easy"
-          />
-          
-          <GameCard
-            title="Type Answer"
-            description="Type the correct answer directly. Perfect for recall practice!"
-            icon={<Keyboard className="w-6 h-6" />}
-            onClick={() => setCurrentView('typeanswer')}
-            difficulty="medium"
-          />
-          
-          <GameCard
-            title="Speed Round"
-            description="Fast-paced 60-second challenge. How many can you answer correctly?"
-            icon={<Timer className="w-6 h-6" />}
-            onClick={() => setCurrentView('speedround')}
-            difficulty="hard"
-          />
-          
-          <GameCard
-            title="Fill Blanks"
-            description="Complete the missing words in the answers. Great for detailed learning!"
-            icon={<Edit3 className="w-6 h-6" />}
-            onClick={() => setCurrentView('fillblanks')}
             difficulty="medium"
           />
         </div>
