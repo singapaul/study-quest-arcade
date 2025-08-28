@@ -25,4 +25,4 @@ export interface StudySession {
   timestamp: Date;
 }
 
-export type GameType = "flashcards" | "quiz" | "memory" | "scramble" | "truefalse" | "typeanswer" | "speedround" | "fillblanks";
+export type GameType = "flashcards" | "quiz" | "memory" | "scramble" | "truefalse" | "typeanswer" | "speedround" | "fillblanks" | "reversequiz" | "sequencematch" | "hintmaster" | "categorysort";

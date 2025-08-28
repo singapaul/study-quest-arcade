@@ -10,8 +10,12 @@ import { TrueFalse } from "@/components/games/TrueFalse";
 import { TypeAnswer } from "@/components/games/TypeAnswer";
 import { SpeedRound } from "@/components/games/SpeedRound";
 import { FillBlanks } from "@/components/games/FillBlanks";
+import { ReverseQuiz } from "@/components/games/ReverseQuiz";
+import { SequenceMatch } from "@/components/games/SequenceMatch";
+import { HintMaster } from "@/components/games/HintMaster";
+import { CategorySort } from "@/components/games/CategorySort";
 import { StudyCard, QuizQuestion, GameScore, GameType } from "@/types/study";
-import { BookOpen, Brain, Zap, Shuffle, Trophy, Home, Settings, CheckSquare, Keyboard, Timer, Edit3 } from "lucide-react";
+import { BookOpen, Brain, Zap, Shuffle, Trophy, Home, Settings, CheckSquare, Keyboard, Timer, Edit3, RotateCcw, ArrowUpDown, Lightbulb, FolderOpen } from "lucide-react";
 import { toast } from "sonner";
 import studyHero from "@/assets/study-hero.jpg";
 
@@ -77,6 +81,14 @@ const Index = () => {
         return <SpeedRound cards={studyCards} onComplete={handleGameComplete} />;
       case 'fillblanks':
         return <FillBlanks cards={studyCards} onComplete={handleGameComplete} />;
+      case 'reversequiz':
+        return <ReverseQuiz cards={studyCards} onComplete={handleGameComplete} />;
+      case 'sequencematch':
+        return <SequenceMatch cards={studyCards} onComplete={handleGameComplete} />;
+      case 'hintmaster':
+        return <HintMaster cards={studyCards} onComplete={handleGameComplete} />;
+      case 'categorysort':
+        return <CategorySort cards={studyCards} onComplete={handleGameComplete} />;
       default:
         return null;
     }
@@ -158,7 +170,7 @@ const Index = () => {
             </div>
             <div className="h-8 w-px bg-border" />
             <div>
-              <p className="text-2xl font-bold text-accent">8</p>
+              <p className="text-2xl font-bold text-accent">12</p>
               <p className="text-sm text-muted-foreground">Mini Games</p>
             </div>
           </div>
@@ -236,6 +248,38 @@ const Index = () => {
             description="Complete the missing words in the answers. Great for detailed learning!"
             icon={<Edit3 className="w-6 h-6" />}
             onClick={() => setCurrentView('fillblanks')}
+            difficulty="medium"
+          />
+
+          <GameCard
+            title="Reverse Quiz"
+            description="See the answer and choose the correct question. Test your reverse thinking!"
+            icon={<RotateCcw className="w-6 h-6" />}
+            onClick={() => setCurrentView('reversequiz')}
+            difficulty="medium"
+          />
+          
+          <GameCard
+            title="Sequence Match"
+            description="Put scrambled words back in the correct order. Perfect for complex answers!"
+            icon={<ArrowUpDown className="w-6 h-6" />}
+            onClick={() => setCurrentView('sequencematch')}
+            difficulty="hard"
+          />
+          
+          <GameCard
+            title="Hint Master"
+            description="Progressive hints help you guess the answer. Use fewer hints for more points!"
+            icon={<Lightbulb className="w-6 h-6" />}
+            onClick={() => setCurrentView('hintmaster')}
+            difficulty="easy"
+          />
+          
+          <GameCard
+            title="Category Sort"
+            description="Group study cards by their categories. Great for organized learning!"
+            icon={<FolderOpen className="w-6 h-6" />}
+            onClick={() => setCurrentView('categorysort')}
             difficulty="medium"
           />
         </div>
