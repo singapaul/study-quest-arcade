@@ -14,8 +14,10 @@ import { ReverseQuiz } from "@/components/games/ReverseQuiz";
 import { SequenceMatch } from "@/components/games/SequenceMatch";
 import { HintMaster } from "@/components/games/HintMaster";
 import { CategorySort } from "@/components/games/CategorySort";
+import { SplatGame } from "@/components/games/SplatGame";
+import { SwipeGame } from "@/components/games/SwipeGame";
 import { StudyCard, QuizQuestion, GameScore, GameType } from "@/types/study";
-import { BookOpen, Brain, Zap, Shuffle, Trophy, Home, Settings, CheckSquare, Keyboard, Timer, Edit3, RotateCcw, ArrowUpDown, Lightbulb, FolderOpen } from "lucide-react";
+import { BookOpen, Brain, Zap, Shuffle, Trophy, Home, Settings, CheckSquare, Keyboard, Timer, Edit3, RotateCcw, ArrowUpDown, Lightbulb, FolderOpen, Target, Heart } from "lucide-react";
 import { toast } from "sonner";
 import studyHero from "@/assets/study-hero.jpg";
 
@@ -89,6 +91,10 @@ const Index = () => {
         return <HintMaster cards={studyCards} onComplete={handleGameComplete} />;
       case 'categorysort':
         return <CategorySort cards={studyCards} onComplete={handleGameComplete} />;
+      case 'splat':
+        return <SplatGame cards={studyCards} onComplete={handleGameComplete} />;
+      case 'swipe':
+        return <SwipeGame cards={studyCards} onComplete={handleGameComplete} />;
       default:
         return null;
     }
@@ -170,7 +176,7 @@ const Index = () => {
             </div>
             <div className="h-8 w-px bg-border" />
             <div>
-              <p className="text-2xl font-bold text-accent">12</p>
+              <p className="text-2xl font-bold text-accent">14</p>
               <p className="text-sm text-muted-foreground">Mini Games</p>
             </div>
           </div>
@@ -281,6 +287,22 @@ const Index = () => {
             icon={<FolderOpen className="w-6 h-6" />}
             onClick={() => setCurrentView('categorysort')}
             difficulty="medium"
+          />
+          
+          <GameCard
+            title="Splat Game"
+            description="Find the correct answer in a sea of options. Quick thinking required!"
+            icon={<Target className="w-6 h-6" />}
+            onClick={() => setCurrentView('splat')}
+            difficulty="hard"
+          />
+          
+          <GameCard
+            title="Swipe Study"
+            description="Swipe like Tinder for revision! Test your confidence level on each card."
+            icon={<Heart className="w-6 h-6" />}
+            onClick={() => setCurrentView('swipe')}
+            difficulty="easy"
           />
         </div>
 
