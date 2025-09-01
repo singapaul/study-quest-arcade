@@ -1,18 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { StudyCard } from "@/types/study";
+import { StudyCard, GameScore } from "@/types/study";
 import { ChevronLeft, ChevronRight, RotateCcw } from "lucide-react";
 
 interface FlashcardGameProps {
   cards: StudyCard[];
-  onComplete: (score?: { correct: number; total: number; timeSpent: number }) => void;
+  onComplete: (score: GameScore) => void;
 }
 
 export const FlashcardGame = ({ cards, onComplete }: FlashcardGameProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [reviewedCards, setReviewedCards] = useState<Set<number>>(new Set());
+  const [startTime] = useState(Date.now());
+  const [timeSpent, setTimeSpent] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeSpent(Math.floor((Date.now() - startTime) / 1000));
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [startTime]);
 
   const currentCard = cards[currentIndex];
 
@@ -25,7 +35,7 @@ export const FlashcardGame = ({ cards, onComplete }: FlashcardGameProps) => {
       onComplete({
         correct: reviewedCards.size + 1,
         total: cards.length,
-        timeSpent: 0
+        timeSpent
       });
     }
   };

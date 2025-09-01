@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { GameCard } from "@/components/ui/game-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScoreDisplay } from "@/components/ui/score-display";
 import UserProfile from "@/components/UserProfile";
 import { useNavigate } from "react-router-dom";
 import { useRevisionData } from "@/hooks/useRevisionData";
@@ -28,11 +29,24 @@ const Index = () => {
   const navigate = useNavigate();
   const [currentView, setCurrentView] = useState<'home' | GameType>('home');
   const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
+  const [gameScore, setGameScore] = useState<GameScore | null>(null);
+  const [completedGameType, setCompletedGameType] = useState<GameType | null>(null);
   const { subjects, categories, studyCards, loading } = useRevisionData();
 
   const handleGameComplete = (score: GameScore) => {
-    const percentage = Math.round((score.correct / score.total) * 100);
-    toast.success(`Game completed! Score: ${score.correct}/${score.total} (${percentage}%)`);
+    setGameScore(score);
+    setCompletedGameType(currentView as GameType);
+  };
+
+  const handlePlayAgain = () => {
+    setGameScore(null);
+    setCompletedGameType(null);
+    // The game will restart automatically since we're not changing currentView
+  };
+
+  const handleGoHome = () => {
+    setGameScore(null);
+    setCompletedGameType(null);
     setCurrentView('home');
   };
 
@@ -141,7 +155,16 @@ const Index = () => {
               <UserProfile />
             </div>
           </div>
-          {renderGameContent()}
+          {gameScore && completedGameType ? (
+            <ScoreDisplay
+              score={gameScore}
+              gameType={completedGameType}
+              onPlayAgain={handlePlayAgain}
+              onGoHome={handleGoHome}
+            />
+          ) : (
+            renderGameContent()
+          )}
         </div>
       </div>
     );
