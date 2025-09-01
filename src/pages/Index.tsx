@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { GameCard } from "@/components/ui/game-card";
-import { StudyManager } from "@/components/StudyManager";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import UserProfile from "@/components/UserProfile";
+import { useNavigate } from "react-router-dom";
+import { useRevisionData } from "@/hooks/useRevisionData";
 import { FlashcardGame } from "@/components/games/FlashcardGame";
 import { QuickQuiz } from "@/components/games/QuickQuiz";
 import { MemoryMatch } from "@/components/games/MemoryMatch";
@@ -17,13 +20,15 @@ import { CategorySort } from "@/components/games/CategorySort";
 import { SplatGame } from "@/components/games/SplatGame";
 import { SwipeGame } from "@/components/games/SwipeGame";
 import { StudyCard, QuizQuestion, GameScore, GameType } from "@/types/study";
-import { BookOpen, Brain, Zap, Shuffle, Trophy, Home, Settings, CheckSquare, Keyboard, Timer, Edit3, RotateCcw, ArrowUpDown, Lightbulb, FolderOpen, Target, Heart } from "lucide-react";
+import { BookOpen, Brain, Zap, Shuffle, Trophy, Home, Settings, CheckSquare, Keyboard, Timer, Edit3, RotateCcw, ArrowUpDown, Lightbulb, FolderOpen, Target, Heart, User } from "lucide-react";
 import { toast } from "sonner";
 import studyHero from "@/assets/study-hero.jpg";
 
 const Index = () => {
-  const [currentView, setCurrentView] = useState<'home' | 'manage' | GameType>('home');
-  const [studyCards, setStudyCards] = useState<StudyCard[]>([]);
+  const navigate = useNavigate();
+  const [currentView, setCurrentView] = useState<'home' | GameType>('home');
+  const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
+  const { subjects, categories, studyCards, loading } = useRevisionData();
 
   const handleGameComplete = (score: GameScore) => {
     const percentage = Math.round((score.correct / score.total) * 100);
@@ -50,16 +55,29 @@ const Index = () => {
     });
   };
 
+  const getFilteredCards = () => {
+    if (!selectedSubject) return studyCards;
+    
+    const subjectCategories = categories.filter(cat => cat.subject_id === selectedSubject);
+    const categoryIds = subjectCategories.map(cat => cat.id);
+    return studyCards.filter(card => categoryIds.includes(card.category_id));
+  };
+
+  const filteredCards = getFilteredCards();
+
   const renderGameContent = () => {
-    if (studyCards.length < 3) {
+    if (filteredCards.length < 3) {
       return (
         <div className="text-center py-12">
           <Trophy className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
           <h3 className="text-xl font-semibold mb-2">Not enough study cards</h3>
           <p className="text-muted-foreground mb-6">
-            You need at least 3 study cards to play games
+            {selectedSubject 
+              ? `You need at least 3 study cards in ${subjects.find(s => s.id === selectedSubject)?.name} to play games`
+              : 'You need at least 3 study cards to play games'
+            }
           </p>
-          <Button onClick={() => setCurrentView('manage')}>
+          <Button onClick={() => navigate('/revision')}>
             Add Study Cards
           </Button>
         </div>
@@ -68,61 +86,39 @@ const Index = () => {
 
     switch (currentView) {
       case 'flashcards':
-        return <FlashcardGame cards={studyCards} onComplete={(score) => score && handleGameComplete(score)} />;
+        return <FlashcardGame cards={filteredCards} onComplete={(score) => score && handleGameComplete(score)} />;
       case 'quiz':
-        return <QuickQuiz questions={generateQuizQuestions(studyCards)} onComplete={handleGameComplete} />;
+        return <QuickQuiz questions={generateQuizQuestions(filteredCards)} onComplete={handleGameComplete} />;
       case 'memory':
-        return <MemoryMatch cards={studyCards} onComplete={handleGameComplete} />;
+        return <MemoryMatch cards={filteredCards} onComplete={handleGameComplete} />;
       case 'scramble':
-        return <WordScramble cards={studyCards} onComplete={handleGameComplete} />;
+        return <WordScramble cards={filteredCards} onComplete={handleGameComplete} />;
       case 'truefalse':
-        return <TrueFalse cards={studyCards} onComplete={handleGameComplete} />;
+        return <TrueFalse cards={filteredCards} onComplete={handleGameComplete} />;
       case 'typeanswer':
-        return <TypeAnswer cards={studyCards} onComplete={handleGameComplete} />;
+        return <TypeAnswer cards={filteredCards} onComplete={handleGameComplete} />;
       case 'speedround':
-        return <SpeedRound cards={studyCards} onComplete={handleGameComplete} />;
+        return <SpeedRound cards={filteredCards} onComplete={handleGameComplete} />;
       case 'fillblanks':
-        return <FillBlanks cards={studyCards} onComplete={handleGameComplete} />;
+        return <FillBlanks cards={filteredCards} onComplete={handleGameComplete} />;
       case 'reversequiz':
-        return <ReverseQuiz cards={studyCards} onComplete={handleGameComplete} />;
+        return <ReverseQuiz cards={filteredCards} onComplete={handleGameComplete} />;
       case 'sequencematch':
-        return <SequenceMatch cards={studyCards} onComplete={handleGameComplete} />;
+        return <SequenceMatch cards={filteredCards} onComplete={handleGameComplete} />;
       case 'hintmaster':
-        return <HintMaster cards={studyCards} onComplete={handleGameComplete} />;
+        return <HintMaster cards={filteredCards} onComplete={handleGameComplete} />;
       case 'categorysort':
-        return <CategorySort cards={studyCards} onComplete={handleGameComplete} />;
+        return <CategorySort cards={filteredCards} onComplete={handleGameComplete} />;
       case 'splat':
-        return <SplatGame cards={studyCards} onComplete={handleGameComplete} />;
+        return <SplatGame cards={filteredCards} onComplete={handleGameComplete} />;
       case 'swipe':
-        return <SwipeGame cards={studyCards} onComplete={handleGameComplete} />;
+        return <SwipeGame cards={filteredCards} onComplete={handleGameComplete} />;
       default:
         return null;
     }
   };
 
-  if (currentView === 'manage') {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/5">
-        <div className="container mx-auto">
-          <div className="flex items-center gap-4 p-6 border-b">
-            <Button
-              variant="ghost"
-              onClick={() => setCurrentView('home')}
-              className="flex items-center gap-2"
-            >
-              <Home className="w-4 h-4" />
-              Back to Games
-            </Button>
-          </div>
-          <StudyManager
-            cards={studyCards}
-            onCardsUpdate={setStudyCards}
-            onStartStudying={() => setCurrentView('home')}
-          />
-        </div>
-      </div>
-    );
-  }
+
 
   if (currentView !== 'home') {
     return (
@@ -137,8 +133,12 @@ const Index = () => {
               <Home className="w-4 h-4" />
               Back to Games
             </Button>
-            <div className="text-sm text-muted-foreground">
-              {studyCards.length} study cards loaded
+            <div className="flex items-center gap-4">
+                          <div className="text-sm text-muted-foreground">
+              {filteredCards.length} study cards loaded
+              {selectedSubject && ` in ${subjects.find(s => s.id === selectedSubject)?.name}`}
+            </div>
+              <UserProfile />
             </div>
           </div>
           {renderGameContent()}
@@ -146,53 +146,118 @@ const Index = () => {
       </div>
     );
   }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/5">
       {/* Header */}
       <div className="container mx-auto px-6 py-8">
-        <div className="text-center mb-12">
-          <div className="flex justify-center mb-6">
-            <img 
-              src={studyHero} 
-              alt="Study materials and learning" 
-              className="rounded-2xl shadow-xl max-w-2xl w-full h-64 object-cover"
-            />
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">Study Games</h1>
+            <p className="text-muted-foreground mt-1">Choose a game mode to start studying</p>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-4">
-            StudyBuddy Games
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Transform your learning with interactive mini-games. Make studying fun and effective!
-          </p>
+          <UserProfile />
         </div>
 
-        {/* Stats and Quick Actions */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-          <div className="flex items-center gap-6 text-center">
-            <div>
-              <p className="text-2xl font-bold text-primary">{studyCards.length}</p>
-              <p className="text-sm text-muted-foreground">Study Cards</p>
-            </div>
-            <div className="h-8 w-px bg-border" />
-            <div>
-              <p className="text-2xl font-bold text-accent">14</p>
-              <p className="text-sm text-muted-foreground">Mini Games</p>
-            </div>
-          </div>
-          
-          <Button
-            onClick={() => setCurrentView('manage')}
-            variant="outline"
-            className="flex items-center gap-2"
-          >
-            <Settings className="w-4 h-4" />
-            Manage Study Cards
-          </Button>
-        </div>
+        <div className="grid lg:grid-cols-4 gap-8">
+          {/* Left Sidebar - Stats and Controls */}
+          <div className="lg:col-span-1 space-y-6 lg:sticky lg:top-6 lg:h-fit">
+            {/* Stats Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Your Progress</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Total Cards:</span>
+                  <span className="text-2xl font-bold text-primary">{studyCards.length}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Subjects:</span>
+                  <span className="text-xl font-semibold text-accent">{subjects.length}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Games Available:</span>
+                  <span className="text-xl font-semibold text-accent">14</span>
+                </div>
+                <div className="pt-3 border-t">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Filtered Cards:</span>
+                    <span className="font-medium text-primary">{filteredCards.length}</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
-        {/* Game Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-7xl mx-auto">
+            {/* Subject Filter */}
+            {subjects.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Filter by Subject</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <Button
+                    variant={selectedSubject === null ? "default" : "outline"}
+                    size="sm"
+                    className="w-full justify-start"
+                    onClick={() => setSelectedSubject(null)}
+                  >
+                    All Subjects
+                  </Button>
+                  {subjects.map((subject) => (
+                    <Button
+                      key={subject.id}
+                      variant={selectedSubject === subject.id ? "default" : "outline"}
+                      size="sm"
+                      className="w-full justify-start"
+                      onClick={() => setSelectedSubject(subject.id)}
+                    >
+                      {subject.name}
+                    </Button>
+                  ))}
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Quick Actions */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Quick Actions</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <Button
+                  onClick={() => navigate('/revision')}
+                  variant="outline"
+                  className="w-full justify-start"
+                >
+                  <Settings className="w-4 h-4 mr-2" />
+                  Manage Cards
+                </Button>
+                <Button
+                  onClick={() => navigate('/profile')}
+                  variant="outline"
+                  className="w-full justify-start"
+                >
+                  <User className="w-4 h-4 mr-2" />
+                  Profile Settings
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Main Content - Game Cards */}
+          <div className="lg:col-span-3">
+            {/* Welcome Header */}
+            <div className="text-center mb-8">
+              <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-4">
+                StudyBuddy Games
+              </h1>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                Transform your learning with interactive mini-games. Make studying fun and effective!
+              </p>
+            </div>
+
+            {/* Game Cards Grid */}
+            <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
           <GameCard
             title="Flashcards"
             description="Classic flip cards to test your memory. Perfect for quick reviews and memorization."
@@ -306,18 +371,89 @@ const Index = () => {
           />
         </div>
 
-        {studyCards.length === 0 && (
-          <div className="text-center mt-12 p-8 border-2 border-dashed border-border rounded-2xl">
-            <Trophy className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-xl font-semibold mb-2">Ready to start learning?</h3>
-            <p className="text-muted-foreground mb-6">
-              Add your first study cards to unlock all mini-games
-            </p>
-            <Button onClick={() => setCurrentView('manage')} size="lg">
-              Create Study Cards
-            </Button>
+          {/* Empty State Messages */}
+          {studyCards.length === 0 && (
+            <div className="text-center mt-12 p-8 border-2 border-dashed border-border rounded-2xl">
+              <Trophy className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-xl font-semibold mb-2">Ready to start learning?</h3>
+              <p className="text-muted-foreground mb-6">
+                Add your first revision cards to unlock all mini-games
+              </p>
+              <Button onClick={() => navigate('/revision')} size="lg">
+                Create Revision Cards
+              </Button>
+            </div>
+          )}
+
+          {studyCards.length > 0 && filteredCards.length === 0 && selectedSubject && (
+            <div className="text-center mt-12 p-8 border-2 border-dashed border-border rounded-2xl">
+              <BookOpen className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-xl font-semibold mb-2">No cards in this subject</h3>
+              <p className="text-muted-foreground mb-6">
+                You don't have any study cards in {subjects.find(s => s.id === selectedSubject)?.name} yet
+              </p>
+              <Button onClick={() => navigate('/revision')} size="lg">
+                Add Cards to {subjects.find(s => s.id === selectedSubject)?.name}
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-background/50 border-t mt-16">
+        <div className="container mx-auto px-6 py-8">
+          <div className="grid md:grid-cols-3 gap-8">
+            <div>
+              <h3 className="text-lg font-semibold mb-4">StudyBuddy</h3>
+              <p className="text-muted-foreground text-sm">
+                Transform your learning with interactive mini-games. Make studying fun and effective!
+              </p>
+            </div>
+            <div>
+              <h4 className="text-md font-semibold mb-4">Quick Links</h4>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>
+                  <button 
+                    onClick={() => navigate('/')}
+                    className="hover:text-primary transition-colors"
+                  >
+                    Home
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => navigate('/revision')}
+                    className="hover:text-primary transition-colors"
+                  >
+                    Manage Cards
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => navigate('/profile')}
+                    className="hover:text-primary transition-colors"
+                  >
+                    Profile
+                  </button>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-md font-semibold mb-4">Features</h4>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>14 Mini Games</li>
+                <li>Subject Organization</li>
+                <li>Progress Tracking</li>
+                <li>Magic Link Auth</li>
+              </ul>
+            </div>
           </div>
-        )}
+          <div className="border-t pt-6 mt-6 text-center text-sm text-muted-foreground">
+            <p>&copy; 2025 StudyBuddy. Built with React, TypeScript, and Supabase.</p>
+          </div>
+                </div>
+      </footer>
       </div>
     </div>
   );
