@@ -45,12 +45,14 @@ https://study-quest-arcade.vercel.app
 https://study-quest-arcade.vercel.app/auth/callback
 ```
 
-### 2. Add Additional Redirect URLs (Optional)
-If you want to support multiple environments:
+### 2. Add Additional Redirect URLs (Required for Development)
+You need to add both development and production URLs:
 ```
 http://localhost:5173/auth/callback
 https://study-quest-arcade.vercel.app/auth/callback
 ```
+
+**Important**: Make sure both URLs are added to the "Redirect URLs" list in your Supabase dashboard. This allows magic links to work in both development and production environments.
 
 ## 🚀 Vercel Deployment
 
