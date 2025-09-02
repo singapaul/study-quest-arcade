@@ -25,6 +25,9 @@ import { SwipeGame } from "@/components/games/SwipeGame";
 import { StudyCard, QuizQuestion, GameScore, GameType } from "@/types/study";
 import { BookOpen, Brain, Zap, Shuffle, Trophy, Home, Settings, CheckSquare, Keyboard, Timer, Edit3, RotateCcw, ArrowUpDown, Lightbulb, FolderOpen, Target, Heart, User } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
+import { PageTransition } from "@/components/ui/page-transition";
+import { AnimatedButton } from "@/components/ui/animated-button";
+import { StaggeredGrid } from "@/components/ui/staggered-grid";
 import { toast } from "sonner";
 import studyHero from "@/assets/study-hero.jpg";
 
@@ -96,9 +99,9 @@ const Index = () => {
               : 'You need at least 3 study cards to play games'
             }
           </p>
-          <Button onClick={() => navigate('/revision')}>
+          <AnimatedButton onClick={() => navigate('/revision')}>
             Add Study Cards
-          </Button>
+          </AnimatedButton>
         </div>
       );
     }
@@ -277,147 +280,152 @@ const Index = () => {
 
           {/* Main Content - Game Cards */}
           <div className="lg:col-span-3">
-            {/* Welcome Header */}
-            <div className="text-center mb-8">
-              <div className="flex items-center justify-center gap-3 mb-4">
-                <Logo size="lg" className="text-primary" />
-                <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent pb-2">
-                  Studybug Games
-                </h1>
+            <PageTransition>
+              {/* Welcome Header */}
+              <div className="text-center mb-8">
+                <div className="flex items-center justify-center gap-3 mb-4">
+                  <Logo size="lg" className="text-primary" />
+                  <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent pb-2">
+                    Studybug Games
+                  </h1>
+                </div>
+                <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                  Transform your learning with interactive mini-games. Make studying fun and effective!
+                </p>
               </div>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                Transform your learning with interactive mini-games. Make studying fun and effective!
-              </p>
-            </div>
+            </PageTransition>
 
             {/* Game Cards Grid */}
-            <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
-          <GameCard
-            title="Flashcards"
-            description="Classic flip cards to test your memory. Perfect for quick reviews and memorization."
-            icon={<BookOpen className="w-6 h-6" />}
-            onClick={() => setCurrentView('flashcards')}
-            difficulty="easy"
-            gameType="flashcards"
-          />
-          
-          <GameCard
-            title="Quick Quiz"
-            description="Multiple choice questions with instant feedback. Challenge your knowledge!"
-            icon={<Zap className="w-6 h-6" />}
-            onClick={() => setCurrentView('quiz')}
-            difficulty="medium"
-            gameType="quiz"
-          />
-          
-          <GameCard
-            title="Memory Match"
-            description="Match questions with answers in this brain-training memory game."
-            icon={<Brain className="w-6 h-6" />}
-            onClick={() => setCurrentView('memory')}
-            difficulty="hard"
-            gameType="memory"
-          />
-          
-          <GameCard
-            title="Word Scramble"
-            description="Unscramble the letters to reveal the correct answer. Fun and challenging!"
-            icon={<Shuffle className="w-6 h-6" />}
-            onClick={() => setCurrentView('scramble')}
-            difficulty="medium"
-            gameType="scramble"
-          />
+            <StaggeredGrid 
+              className="grid md:grid-cols-2 xl:grid-cols-3 gap-4"
+              delay={300}
+            >
+              <GameCard
+                title="Flashcards"
+                description="Classic flip cards to test your memory. Perfect for quick reviews and memorization."
+                icon={<BookOpen className="w-6 h-6" />}
+                onClick={() => setCurrentView('flashcards')}
+                difficulty="easy"
+                gameType="flashcards"
+              />
+              
+              <GameCard
+                title="Quick Quiz"
+                description="Multiple choice questions with instant feedback. Challenge your knowledge!"
+                icon={<Zap className="w-6 h-6" />}
+                onClick={() => setCurrentView('quiz')}
+                difficulty="medium"
+                gameType="quiz"
+              />
+              
+              <GameCard
+                title="Memory Match"
+                description="Match questions with answers in this brain-training memory game."
+                icon={<Brain className="w-6 h-6" />}
+                onClick={() => setCurrentView('memory')}
+                difficulty="hard"
+                gameType="memory"
+              />
+              
+              <GameCard
+                title="Word Scramble"
+                description="Unscramble the letters to reveal the correct answer. Fun and challenging!"
+                icon={<Shuffle className="w-6 h-6" />}
+                onClick={() => setCurrentView('scramble')}
+                difficulty="medium"
+                gameType="scramble"
+              />
 
-          <GameCard
-            title="True or False"
-            description="Quick true/false questions to test your knowledge rapidly."
-            icon={<CheckSquare className="w-6 h-6" />}
-            onClick={() => setCurrentView('truefalse')}
-            difficulty="easy"
-            gameType="truefalse"
-          />
-          
-          <GameCard
-            title="Type Answer"
-            description="Type the correct answer directly. Perfect for recall practice!"
-            icon={<Keyboard className="w-6 h-6" />}
-            onClick={() => setCurrentView('typeanswer')}
-            difficulty="medium"
-            gameType="typeanswer"
-          />
-          
-          <GameCard
-            title="Speed Round"
-            description="Fast-paced 60-second challenge. How many can you answer correctly?"
-            icon={<Timer className="w-6 h-6" />}
-            onClick={() => setCurrentView('speedround')}
-            difficulty="hard"
-            gameType="speedround"
-          />
-          
-          <GameCard
-            title="Fill Blanks"
-            description="Complete the missing words in the answers. Great for detailed learning!"
-            icon={<Edit3 className="w-6 h-6" />}
-            onClick={() => setCurrentView('fillblanks')}
-            difficulty="medium"
-            gameType="fillblanks"
-          />
+              <GameCard
+                title="True or False"
+                description="Quick true/false questions to test your knowledge rapidly."
+                icon={<CheckSquare className="w-6 h-6" />}
+                onClick={() => setCurrentView('truefalse')}
+                difficulty="easy"
+                gameType="truefalse"
+              />
+              
+              <GameCard
+                title="Type Answer"
+                description="Type the correct answer directly. Perfect for recall practice!"
+                icon={<Keyboard className="w-6 h-6" />}
+                onClick={() => setCurrentView('typeanswer')}
+                difficulty="medium"
+                gameType="typeanswer"
+              />
+              
+              <GameCard
+                title="Speed Round"
+                description="Fast-paced 60-second challenge. How many can you answer correctly?"
+                icon={<Timer className="w-6 h-6" />}
+                onClick={() => setCurrentView('speedround')}
+                difficulty="hard"
+                gameType="speedround"
+              />
+              
+              <GameCard
+                title="Fill Blanks"
+                description="Complete the missing words in the answers. Great for detailed learning!"
+                icon={<Edit3 className="w-6 h-6" />}
+                onClick={() => setCurrentView('fillblanks')}
+                difficulty="medium"
+                gameType="fillblanks"
+              />
 
-          <GameCard
-            title="Reverse Quiz"
-            description="See the answer and choose the correct question. Test your reverse thinking!"
-            icon={<RotateCcw className="w-6 h-6" />}
-            onClick={() => setCurrentView('reversequiz')}
-            difficulty="medium"
-            gameType="reversequiz"
-          />
-          
-          <GameCard
-            title="Sequence Match"
-            description="Put scrambled words back in the correct order. Perfect for complex answers!"
-            icon={<ArrowUpDown className="w-6 h-6" />}
-            onClick={() => setCurrentView('sequencematch')}
-            difficulty="hard"
-            gameType="sequencematch"
-          />
-          
-          <GameCard
-            title="Hint Master"
-            description="Progressive hints help you guess the answer. Use fewer hints for more points!"
-            icon={<Lightbulb className="w-6 h-6" />}
-            onClick={() => setCurrentView('hintmaster')}
-            difficulty="easy"
-            gameType="hintmaster"
-          />
-          
-          <GameCard
-            title="Category Sort"
-            description="Group study cards by their categories. Great for organized learning!"
-            icon={<FolderOpen className="w-6 h-6" />}
-            onClick={() => setCurrentView('categorysort')}
-            difficulty="medium"
-            gameType="categorysort"
-          />
-          
-          <GameCard
-            title="Splat Game"
-            description="Find the correct answer in a sea of options. Quick thinking required!"
-            icon={<Target className="w-6 h-6" />}
-            onClick={() => setCurrentView('splat')}
-            difficulty="hard"
-            gameType="splat"
-          />
-          
-          <GameCard
-            title="Swipe Study"
-            description="Swipe like Tinder for revision! Test your confidence level on each card."
-            icon={<Heart className="w-6 h-6" />}
-            onClick={() => setCurrentView('swipe')}
-            difficulty="easy"
-            gameType="swipe"
-          />
-        </div>
+              <GameCard
+                title="Reverse Quiz"
+                description="See the answer and choose the correct question. Test your reverse thinking!"
+                icon={<RotateCcw className="w-6 h-6" />}
+                onClick={() => setCurrentView('reversequiz')}
+                difficulty="medium"
+                gameType="reversequiz"
+              />
+              
+              <GameCard
+                title="Sequence Match"
+                description="Put scrambled words back in the correct order. Perfect for complex answers!"
+                icon={<ArrowUpDown className="w-6 h-6" />}
+                onClick={() => setCurrentView('sequencematch')}
+                difficulty="hard"
+                gameType="sequencematch"
+              />
+              
+              <GameCard
+                title="Hint Master"
+                description="Progressive hints help you guess the answer. Use fewer hints for more points!"
+                icon={<Lightbulb className="w-6 h-6" />}
+                onClick={() => setCurrentView('hintmaster')}
+                difficulty="easy"
+                gameType="hintmaster"
+              />
+              
+              <GameCard
+                title="Category Sort"
+                description="Group study cards by their categories. Great for organized learning!"
+                icon={<FolderOpen className="w-6 h-6" />}
+                onClick={() => setCurrentView('categorysort')}
+                difficulty="medium"
+                gameType="categorysort"
+              />
+              
+              <GameCard
+                title="Splat Game"
+                description="Find the correct answer in a sea of options. Quick thinking required!"
+                icon={<Target className="w-6 h-6" />}
+                onClick={() => setCurrentView('splat')}
+                difficulty="hard"
+                gameType="splat"
+              />
+              
+              <GameCard
+                title="Swipe Study"
+                description="Swipe like Tinder for revision! Test your confidence level on each card."
+                icon={<Heart className="w-6 h-6" />}
+                onClick={() => setCurrentView('swipe')}
+                difficulty="easy"
+                gameType="swipe"
+              />
+            </StaggeredGrid>
 
           {/* Empty State Messages */}
           {studyCards.length === 0 && (
@@ -427,9 +435,9 @@ const Index = () => {
               <p className="text-muted-foreground mb-6">
                 Add your first revision cards to unlock all mini-games
               </p>
-              <Button onClick={() => navigate('/revision')} size="lg">
+              <AnimatedButton onClick={() => navigate('/revision')} size="lg">
                 Create Revision Cards
-              </Button>
+              </AnimatedButton>
             </div>
           )}
 
@@ -440,9 +448,9 @@ const Index = () => {
               <p className="text-muted-foreground mb-6">
                 You don't have any study cards in {subjects.find(s => s.id === selectedSubject)?.name} yet
               </p>
-              <Button onClick={() => navigate('/revision')} size="lg">
+              <AnimatedButton onClick={() => navigate('/revision')} size="lg">
                 Add Cards to {subjects.find(s => s.id === selectedSubject)?.name}
-              </Button>
+              </AnimatedButton>
             </div>
           )}
         </div>

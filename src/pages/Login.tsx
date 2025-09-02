@@ -8,6 +8,8 @@ import { Mail, Loader2, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import studyHero from '@/assets/study-hero.jpg';
 import { Logo } from '@/components/ui/logo';
+import { PageTransition } from '@/components/ui/page-transition';
+import { AnimatedButton } from '@/components/ui/animated-button';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -65,7 +67,8 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/5 flex items-center justify-center p-4">
-      <div className="w-full max-w-4xl grid md:grid-cols-2 gap-8 items-center">
+      <PageTransition>
+        <div className="w-full max-w-4xl grid md:grid-cols-2 gap-8 items-center">
         {/* Left side - Hero image and welcome text */}
         <div className="hidden md:block space-y-6">
           <div className="space-y-4">
@@ -120,7 +123,7 @@ const Login = () => {
                   required
                 />
               </div>
-              <Button
+              <AnimatedButton
                 type="submit"
                 disabled={isLoading || !email}
                 className="w-full h-12"
@@ -131,7 +134,7 @@ const Login = () => {
                   <ArrowRight className="w-4 h-4 mr-2" />
                 )}
                 Send magic link
-              </Button>
+              </AnimatedButton>
             </form>
 
             <div className="text-center">
@@ -148,7 +151,8 @@ const Login = () => {
             </div>
           </CardContent>
         </Card>
-      </div>
+        </div>
+      </PageTransition>
     </div>
   );
 };
