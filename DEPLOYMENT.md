@@ -48,7 +48,7 @@ https://study-quest-arcade.vercel.app/auth/callback
 ### 2. Add Additional Redirect URLs (Required for Development)
 You need to add both development and production URLs:
 ```
-http://localhost:5173/auth/callback
+http://localhost:8081/auth/callback
 https://study-quest-arcade.vercel.app/auth/callback
 ```
 
