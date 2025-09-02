@@ -24,6 +24,7 @@ import { SplatGame } from "@/components/games/SplatGame";
 import { SwipeGame } from "@/components/games/SwipeGame";
 import { StudyCard, QuizQuestion, GameScore, GameType } from "@/types/study";
 import { BookOpen, Brain, Zap, Shuffle, Trophy, Home, Settings, CheckSquare, Keyboard, Timer, Edit3, RotateCcw, ArrowUpDown, Lightbulb, FolderOpen, Target, Heart, User } from "lucide-react";
+import { Logo } from "@/components/ui/logo";
 import { toast } from "sonner";
 import studyHero from "@/assets/study-hero.jpg";
 
@@ -278,9 +279,12 @@ const Index = () => {
           <div className="lg:col-span-3">
             {/* Welcome Header */}
             <div className="text-center mb-8">
-              <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-4">
-                StudyBuddy Games
-              </h1>
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <Logo size="lg" className="text-primary" />
+                <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent pb-2">
+                  Studybug Games
+                </h1>
+              </div>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
                 Transform your learning with interactive mini-games. Make studying fun and effective!
               </p>
@@ -449,7 +453,7 @@ const Index = () => {
         <div className="container mx-auto px-6 py-8">
           <div className="grid md:grid-cols-3 gap-8">
             <div>
-              <h3 className="text-lg font-semibold mb-4">StudyBuddy</h3>
+              <h3 className="text-lg font-semibold mb-4">Studybug</h3>
               <p className="text-muted-foreground text-sm">
                 Transform your learning with interactive mini-games. Make studying fun and effective!
               </p>
@@ -494,7 +498,7 @@ const Index = () => {
             </div>
           </div>
           <div className="border-t pt-6 mt-6 text-center text-sm text-muted-foreground">
-            <p>&copy; 2025 StudyBuddy. Built with React, TypeScript, and Supabase.</p>
+            <p>&copy; 2025 Studybug. Built with React, TypeScript, and Supabase.</p>
           </div>
                 </div>
       </footer>

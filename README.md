@@ -1,4 +1,6 @@
-# Welcome to your Lovable project
+# Studybug
+
+Transform your learning with interactive mini-games. Make studying fun and effective!
 
 ## Project info
 

@@ -903,7 +903,7 @@ const RevisionManager = () => {
         <div className="container mx-auto px-6 py-8">
           <div className="grid md:grid-cols-3 gap-8">
             <div>
-              <h3 className="text-lg font-semibold mb-4">StudyBuddy</h3>
+              <h3 className="text-lg font-semibold mb-4">Studybug</h3>
               <p className="text-muted-foreground text-sm">
                 Transform your learning with interactive mini-games. Make studying fun and effective!
               </p>
@@ -948,7 +948,7 @@ const RevisionManager = () => {
             </div>
           </div>
           <div className="border-t pt-6 mt-6 text-center text-sm text-muted-foreground">
-            <p>&copy; 2025 StudyBuddy. Built with React, TypeScript, and Supabase.</p>
+            <p>&copy; 2025 Studybug. Built with React, TypeScript, and Supabase.</p>
           </div>
         </div>
       </footer>

@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Mail, Loader2, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import studyHero from '@/assets/study-hero.jpg';
+import { Logo } from '@/components/ui/logo';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -68,9 +69,12 @@ const Login = () => {
         {/* Left side - Hero image and welcome text */}
         <div className="hidden md:block space-y-6">
           <div className="space-y-4">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-              Welcome to StudyBuddy
-            </h1>
+            <div className="flex items-center gap-3">
+              <Logo size="lg" className="text-primary" />
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+                Welcome to Studybug
+              </h1>
+            </div>
             <p className="text-xl text-muted-foreground">
               Transform your learning with interactive mini-games. Make studying fun and effective!
             </p>
@@ -84,7 +88,7 @@ const Login = () => {
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl" />
           </div>
           <div className="space-y-2">
-            <h3 className="text-lg font-semibold">Why StudyBuddy?</h3>
+            <h3 className="text-lg font-semibold">Why Studybug?</h3>
             <ul className="space-y-1 text-sm text-muted-foreground">
               <li>• 14 different mini-games to keep learning engaging</li>
               <li>• Track your progress and improve retention</li>
@@ -97,7 +101,7 @@ const Login = () => {
         {/* Right side - Login form */}
         <Card className="w-full max-w-md mx-auto">
                       <CardHeader className="text-center space-y-2">
-              <CardTitle className="text-2xl">Sign in to StudyBuddy</CardTitle>
+              <CardTitle className="text-2xl">Sign in to Studybug</CardTitle>
               <CardDescription>
                 Enter your email to receive a magic link
               </CardDescription>
