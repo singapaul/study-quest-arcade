@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { GameLockOverlay } from "./game-lock-overlay";
 import { GAME_TIERS } from "@/types/subscription";
+import { Lock } from "lucide-react";
 
 interface GameCardProps {
   title: string;
@@ -68,15 +69,26 @@ export const GameCard = ({
             <span className="text-xs font-medium px-2 py-1 rounded-full bg-muted text-muted-foreground">
               {difficulty.toUpperCase()}
             </span>
-            {isProGame && isTrial && (
-              <span className="text-xs font-medium px-2 py-1 rounded-full bg-gradient-to-r from-yellow-500 to-amber-500 text-white">
-                PRO
-              </span>
-            )}
           </div>
         </div>
       </div>
       
+      {/* Pro badge and lock icon for locked games */}
+      {isProGame && isTrial && (
+        <>
+          <div className="absolute top-3 right-3 z-20">
+            <span className="text-xs font-bold px-2 py-1 rounded-full bg-gradient-to-r from-yellow-500 to-amber-500 text-white shadow-lg">
+              PRO
+            </span>
+          </div>
+          <div className="absolute top-3 left-3 z-20">
+            <div className="w-6 h-6 rounded-full bg-yellow-500/20 backdrop-blur-sm flex items-center justify-center">
+              <Lock className="w-3 h-3 text-yellow-600" />
+            </div>
+          </div>
+        </>
+      )}
+
       {/* Animated border gradient */}
       <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
       

@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { SubscriptionInfo, SubscriptionTier, SUBSCRIPTION_LIMITS } from '@/types/subscription';
+import { SubscriptionInfo, SubscriptionTier, SUBSCRIPTION_LIMITS, GAME_TIERS } from '@/types/subscription';
 
 interface SubscriptionContextType {
   subscription: SubscriptionInfo;
@@ -44,9 +44,9 @@ export const SubscriptionProvider = ({ children }: SubscriptionProviderProps) =>
   const canPlayGame = (gameType: string): boolean => {
     if (isPro) return true;
     
-    // Check if game is available in trial
-    const gameTier = subscription.tier === 'trial' ? 'trial' : 'pro';
-    const isGameAvailable = gameType in SUBSCRIPTION_LIMITS[gameTier];
+    // Check if game is available in trial tier
+    const gameTier = GAME_TIERS[gameType];
+    const isGameAvailable = gameTier === 'trial';
     
     // Check if user hasn't exceeded game limit
     const hasGameLimit = subscription.gamesPlayed < subscription.limits.maxGames;
