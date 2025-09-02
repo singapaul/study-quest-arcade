@@ -3,9 +3,11 @@ import { Button } from "@/components/ui/button";
 import { GameCard } from "@/components/ui/game-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScoreDisplay } from "@/components/ui/score-display";
+import { SubscriptionStatus } from "@/components/ui/subscription-status";
 import UserProfile from "@/components/UserProfile";
 import { useNavigate } from "react-router-dom";
 import { useRevisionData } from "@/hooks/useRevisionData";
+import { useSubscription } from "@/contexts/SubscriptionContext";
 import { FlashcardGame } from "@/components/games/FlashcardGame";
 import { QuickQuiz } from "@/components/games/QuickQuiz";
 import { MemoryMatch } from "@/components/games/MemoryMatch";
@@ -32,10 +34,12 @@ const Index = () => {
   const [gameScore, setGameScore] = useState<GameScore | null>(null);
   const [completedGameType, setCompletedGameType] = useState<GameType | null>(null);
   const { subjects, categories, studyCards, loading } = useRevisionData();
+  const { incrementGamesPlayed } = useSubscription();
 
   const handleGameComplete = (score: GameScore) => {
     setGameScore(score);
     setCompletedGameType(currentView as GameType);
+    incrementGamesPlayed();
   };
 
   const handlePlayAgain = () => {
@@ -184,6 +188,9 @@ const Index = () => {
         <div className="grid lg:grid-cols-4 gap-8">
           {/* Left Sidebar - Stats and Controls */}
           <div className="lg:col-span-1 space-y-6 lg:sticky lg:top-6 lg:h-fit">
+            {/* Subscription Status */}
+            <SubscriptionStatus />
+            
             {/* Stats Card */}
             <Card>
               <CardHeader>
@@ -287,6 +294,7 @@ const Index = () => {
             icon={<BookOpen className="w-6 h-6" />}
             onClick={() => setCurrentView('flashcards')}
             difficulty="easy"
+            gameType="flashcards"
           />
           
           <GameCard
@@ -295,6 +303,7 @@ const Index = () => {
             icon={<Zap className="w-6 h-6" />}
             onClick={() => setCurrentView('quiz')}
             difficulty="medium"
+            gameType="quiz"
           />
           
           <GameCard
@@ -303,6 +312,7 @@ const Index = () => {
             icon={<Brain className="w-6 h-6" />}
             onClick={() => setCurrentView('memory')}
             difficulty="hard"
+            gameType="memory"
           />
           
           <GameCard
@@ -311,6 +321,7 @@ const Index = () => {
             icon={<Shuffle className="w-6 h-6" />}
             onClick={() => setCurrentView('scramble')}
             difficulty="medium"
+            gameType="scramble"
           />
 
           <GameCard
@@ -319,6 +330,7 @@ const Index = () => {
             icon={<CheckSquare className="w-6 h-6" />}
             onClick={() => setCurrentView('truefalse')}
             difficulty="easy"
+            gameType="truefalse"
           />
           
           <GameCard
@@ -327,6 +339,7 @@ const Index = () => {
             icon={<Keyboard className="w-6 h-6" />}
             onClick={() => setCurrentView('typeanswer')}
             difficulty="medium"
+            gameType="typeanswer"
           />
           
           <GameCard
@@ -335,6 +348,7 @@ const Index = () => {
             icon={<Timer className="w-6 h-6" />}
             onClick={() => setCurrentView('speedround')}
             difficulty="hard"
+            gameType="speedround"
           />
           
           <GameCard
@@ -343,6 +357,7 @@ const Index = () => {
             icon={<Edit3 className="w-6 h-6" />}
             onClick={() => setCurrentView('fillblanks')}
             difficulty="medium"
+            gameType="fillblanks"
           />
 
           <GameCard
@@ -351,6 +366,7 @@ const Index = () => {
             icon={<RotateCcw className="w-6 h-6" />}
             onClick={() => setCurrentView('reversequiz')}
             difficulty="medium"
+            gameType="reversequiz"
           />
           
           <GameCard
@@ -359,6 +375,7 @@ const Index = () => {
             icon={<ArrowUpDown className="w-6 h-6" />}
             onClick={() => setCurrentView('sequencematch')}
             difficulty="hard"
+            gameType="sequencematch"
           />
           
           <GameCard
@@ -367,6 +384,7 @@ const Index = () => {
             icon={<Lightbulb className="w-6 h-6" />}
             onClick={() => setCurrentView('hintmaster')}
             difficulty="easy"
+            gameType="hintmaster"
           />
           
           <GameCard
@@ -375,6 +393,7 @@ const Index = () => {
             icon={<FolderOpen className="w-6 h-6" />}
             onClick={() => setCurrentView('categorysort')}
             difficulty="medium"
+            gameType="categorysort"
           />
           
           <GameCard
@@ -383,6 +402,7 @@ const Index = () => {
             icon={<Target className="w-6 h-6" />}
             onClick={() => setCurrentView('splat')}
             difficulty="hard"
+            gameType="splat"
           />
           
           <GameCard
@@ -391,6 +411,7 @@ const Index = () => {
             icon={<Heart className="w-6 h-6" />}
             onClick={() => setCurrentView('swipe')}
             difficulty="easy"
+            gameType="swipe"
           />
         </div>
 

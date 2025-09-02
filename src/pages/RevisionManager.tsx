@@ -8,8 +8,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
+import { CardLimitWarning } from '@/components/ui/card-limit-warning';
+import { SubscriptionStatus } from '@/components/ui/subscription-status';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSubscription } from '@/contexts/SubscriptionContext';
 import { RevisionService } from '@/services/revisionService';
 import { ExportService } from '@/services/exportService';
 import { ArrowLeft, Plus, Edit, Trash2, Play, BookOpen, Brain, Zap, Shuffle, CheckSquare, Keyboard, Timer, Edit3, RotateCcw, ArrowUpDown, Lightbulb, FolderOpen, Target, Heart, Download, Upload, Database } from 'lucide-react';
@@ -51,6 +54,7 @@ const GAME_TYPES = [
 const RevisionManager = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { canCreateCard, incrementCardsCreated, upgradeToPro } = useSubscription();
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [studyCards, setStudyCards] = useState<StudyCard[]>([]);
@@ -167,6 +171,12 @@ const RevisionManager = () => {
     e.preventDefault();
     if (!user || !cardForm.category_id) return;
 
+    // Check if user can create a new card (only for new cards, not edits)
+    if (!editingCard && !canCreateCard()) {
+      toast.error('You have reached your card limit. Upgrade to Pro for unlimited cards!');
+      return;
+    }
+
     try {
       let result;
       if (editingCard) {
@@ -181,6 +191,11 @@ const RevisionManager = () => {
           category_id: cardForm.category_id,
           created_by: user.id
         });
+        
+        // Increment card count for new cards
+        if (result) {
+          incrementCardsCreated();
+        }
       }
 
       if (result) {
@@ -366,6 +381,9 @@ const RevisionManager = () => {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Left sidebar - Subjects and Categories */}
           <div className="lg:col-span-1 space-y-6 lg:sticky lg:top-6 lg:h-fit">
+            {/* Subscription Status */}
+            <SubscriptionStatus />
+            
             {/* Data Summary */}
             <Card>
               <CardHeader>
@@ -708,6 +726,9 @@ const RevisionManager = () => {
                     </DialogContent>
                   </Dialog>
                 </div>
+
+                {/* Card Limit Warning */}
+                <CardLimitWarning onUpgrade={upgradeToPro} />
 
                 {/* Study Cards List */}
                 <div className="space-y-4">
